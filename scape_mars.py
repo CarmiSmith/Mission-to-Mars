@@ -19,14 +19,18 @@ def scrape():
     # nasa news
     # url to scrape
     url = 'https://mars.nasa.gov/news/'
+    
     # Retrieve page with the requests module
     html = requests.get(url)
+
     # html = browser.html
     # Create BeautifulSoup object; parse with 'html.parser'
     soup = bs(html.text, 'html.parser')
+
     #store first head line as news_title
     news_title = soup.find('div', class_='content_title').text.strip()
     print(news_title)
+
     #store paragraph as news_p
     news_p = soup.find('div', class_="article_teaser_body").text.strip()
     print(news_p)
@@ -34,12 +38,16 @@ def scrape():
 
     # jpl image
     browser = init_browser()
+
     # new url 
     jlp_url = 'https://data-class-jpl-space.s3.amazonaws.com/JPL_Space/index.html'
+
     # splinter url 
     browser.visit(jlp_url)
+
     # Retrieve page html
     html = browser.html
+
     # Create BeautifulSoup object; parse with 'html.parser'
     soup = bs(html, 'html.parser')
     image_path = soup.find('a', class_="showimg")['href']
@@ -49,10 +57,13 @@ def scrape():
     # mars facts
     #scrape table 
     facts_url = "https://space-facts.com/mars/"
+
     # retrieve table 
     tables = pd.read_html(facts_url)
+
     # check that correct table is in dataframe
     mars_facts_df = tables[2]
+
     # Use Pandas to convert the data to a HTML table string.
     mars_html_table = mars_facts_df.to_html(index=False, header=False)  
 
@@ -61,16 +72,22 @@ def scrape():
     # set up urls 
     # this url is the base to use to find both the name and image info
     usgs_url = 'https://astrogeology.usgs.gov'
+
     # this addition to the base will allow us to scrape the hemisphere name
-    hemisphere_url = '/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'  
+    hemisphere_url = '/search/results?q=hemisphere+enhanced&k1=target&v1=Mars' 
+
     # visit url in splinter
     browser.visit(usgs_url + hemisphere_url)
+
     # Retrieve html
     hemisphere_html = browser.html
+
     # Create BeautifulSoup object; parse with 'html.parser'
-    soup = bs(hemisphere_html, 'html.parser')  
+    soup = bs(hemisphere_html, 'html.parser')
+
     # name is in div class='item' in h3 element
-    names = soup.find_all('div', class_='item')    
+    names = soup.find_all('div', class_='item') 
+
     # loop to get and store names in a list
     titles=[]
 
@@ -88,6 +105,7 @@ def scrape():
 
     # Retrieve html
     html = browser.html
+
     # Create BeautifulSoup object; parse with 'html.parser'
     soup = bs(html, 'html.parser')
 
@@ -95,12 +113,16 @@ def scrape():
     hemp_image_url = []
 
     for hemp_url in title_url:
+
         #open browser for each url
         browser.visit(hemp_url)
+
         # Create BeautifulSoup object; parse with 'html.parser'
         soup = bs(html, 'html.parser')
+
         # create new url for list
         image_url = usgs_url + soup.find('img', class_='wide-image')['src']
+
         # add url to list for dict 
         hemp_image_url.append(image_url)
 
@@ -112,6 +134,7 @@ def scrape():
 
     # loop to combine list into dictonary and then add to blank list
     for x in range(len(hemp_image_url)):
+
         # for x combine the key value pair with comprehension and add the h_i_u list
         hemisphere_image_url.append({'title':titles[x], 'hemp_image_url': hemp_image_url[x]})
     print(hemisphere_image_url)
