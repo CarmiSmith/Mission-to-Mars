@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mars Scraped</title>
+    <!-- bring in our bootstrap stylesheet -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
+    crossorigin="anonymous">
+    <!-- SCRIPTS FOR BOOTSTRAP -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Jumbotron -->
+        <div class="jumbotron text-center border-bottom">
+            <h1 class="font-weight-bold">Mission to Mars</h1>
+            <p><a class="btn btn-primary btn-lg" href="../scrape" role="button">Scrape New Data</a></p>
+        </div>
+
+        <!-- mars news -->
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Latest Mars News</h1>
+            </div>
+        </div>
+        <!-- mars head line and news_title news_p -->
+        <div class="row">
+            <div class="col-md-12">
+                <h2>{{mars.news_title}}</h2>
+                <p>{{mars.news_p}}</p>
+            </div>
+        </div>
+        <!-- row with feature image and table featured_image_url call -->
+        <div class='row'>
+            <div class="col-md-8">
+                <h1>Featured Mars Image</h1>
+                <hr>
+                <img src="{{mars.featured_image_url}}" alt="Featured Mars Image">
+            </div>
+            <!-- look at css for table -->
+            <div class="col-md-4">
+                <h2>Mars Facts</h2>
+                <table class="table table-striped">{{mars.fact_table | safe}}</table>
+            </div>
+        </div>
+        <!-- row with Mars Hemispheres -->
+        <div class="row">
+            <div class="col-md-8 offset -4">
+                <h2 class="align-items-center">Mars Hemispheres</h2>
+            </div>
+        </div>
+        <!--row 2 by 2 grid with hemi photos calls to dict hemisphere urls will need loop -->
+        <div class="row">
+            {% for hemisphere in mars.hemisphere_images %}
+            <div class="col-6">
+                <div>
+                    <img width="550px" height="550px" src="{{hemisphere.img_url | safe}}">
+                </div>
+                <div>
+                    <h4>{{hemisphere.title | safe}}</h4>
+                </div>
+            </div>
+
+            {% endfor %}
+        </div>
+
+    </div>    
+</body>
+</html>
