@@ -6,7 +6,6 @@ import os
 import requests
 import pymongo
 from webdriver_manager.chrome import ChromeDriverManager
-browser = Browser()
 
 # Create browser function to call as needed with scraping
 def init_browser():
@@ -16,7 +15,7 @@ def init_browser():
 # Create scraping function
 def scrape():
     mars_dict = {}
-
+    browser = init_browser()
     # Nasa News
     # url to scrape
     url = 'https://mars.nasa.gov/news/'
