@@ -68,11 +68,11 @@ def scrape():
     # Mars Hemispheres
 
     # Set up urls 
-    usgs_url = 'https://astrogeology.usgs.gov'
-    hemisphere_url = '/search/results?q=hemisphere+enhanced&k1=target&v1=Mars' 
+    usgs_url = 'https://https://astrogeology.usgs.gov'
+    #hemisphere_url = '/search/results?q=hemisphere+enhanced&k1=target&v1=Mars' 
 
     # Visit url in splinter
-    browser.visit(usgs_url + hemisphere_url)
+    browser.visit(usgs_url) #+ hemisphere_url)
 
     # Retrieve html
     hemisphere_html = browser.html
