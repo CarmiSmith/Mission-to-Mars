@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mars Scraped</title>
     <!-- bring in our bootstrap stylesheet -->
@@ -19,7 +19,7 @@
         <!-- Jumbotron -->
         <div class="jumbotron text-center border-bottom">
             <h1 class="font-weight-bold">Mission to Mars</h1>
-            <p><a class="btn btn-primary btn-lg" href="../scrape" role="button">Scrape New Data</a></p>
+            <p><a class="btn btn-primary btn-lg" href="/scrape" role="button">Scrape New Data</a></p>
         </div>
 
         <!-- mars news -->
@@ -45,7 +45,7 @@
             <!-- look at css for table -->
             <div class="col-md-4">
                 <h2>Mars Facts</h2>
-                <table class="table table-striped">{{mars.fact_table | safe}}</table>
+                <table class="table table-striped">{{mars.mars_html_table | safe}}</table>
             </div>
         </div>
         <!-- row with Mars Hemispheres -->
@@ -59,7 +59,7 @@
             {% for hemisphere in mars.hemisphere_images %}
             <div class="col-6">
                 <div>
-                    <img width="550px" height="550px" src="{{hemisphere.image_url | safe}}">
+                    <img width="550px" height="550px" src="{{hemisphere.img_urls | safe}}">
                 </div>
                 <div>
                     <h4>{{hemisphere.title | safe}}</h4>
@@ -72,3 +72,4 @@
     </div>    
 </body>
 </html>
+

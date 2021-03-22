@@ -16,6 +16,7 @@ def init_browser():
 def scrape():
     mars_dict = {}
     browser = init_browser()
+
     # Nasa News
     # url to scrape
     url = 'https://mars.nasa.gov/news/'
@@ -37,6 +38,7 @@ def scrape():
     news_p = soup.find('div', class_="article_teaser_body").text.strip()
     print(news_p)
      
+    
     # New url 
     jlp_url = 'https://data-class-jpl-space.s3.amazonaws.com/JPL_Space/index.html'
 
@@ -50,7 +52,7 @@ def scrape():
     soup = bs(html, 'html.parser')
     image_path = soup.find('a', class_="showimg")['href']
     featured_image_url = jlp_url + image_path
-  
+    print(featured_image_url)
 
     # Mars Facts
     # Scrape table 
@@ -63,76 +65,56 @@ def scrape():
     mars_facts_df = tables[2]
 
     # Use Pandas to convert the data to a HTML table string.
-    mars_html_table = mars_facts_df.to_html(index=False, header=False)  
+    mars_html_table = mars_facts_df.to_html(index=False, header=False)
+    print(mars_html_table)  
 
     # Mars Hemispheres
 
     # Set up urls 
     usgs_url = 'https://https://astrogeology.usgs.gov'
-    #hemisphere_url = '/search/results?q=hemisphere+enhanced&k1=target&v1=Mars' 
+    hemisphere_url = '/search/results?q=hemisphere+enhanced&k1=target&v1=Mars' 
 
     # Visit url in splinter
-    browser.visit(usgs_url) #+ hemisphere_url)
+    browser.visit(usgs_url + hemisphere_url)
 
     # Retrieve html
     hemisphere_html = browser.html
 
     # Create BeautifulSoup object; parse with 'html.parser'
-    soup = bs(hemisphere_html, 'html.parser')
+    hemispheres_soup = bs(hemisphere_html, 'html.parser')
 
-    # Name is in div class='item' in h3 element
-    names = soup.find_all('div', class_='item') 
+    # Mars hemispheres products data
+    all_mars_hemispheres = hemispheres_soup.find('div', class_='collapsible results')
+    mars_hemispheres = all_mars_hemispheres.find_all('div', class_='item')
 
-    # Loop to get and store names in a list
-    titles=[]
+    hemisphere_image_urls = []
 
-    for name in names:
-        titles.append(name.find('h3').text.strip())
+    # Iterate through each hemisphere data
+    for i in mars_hemispheres:
+        # Collect Title
+        hemisphere = i.find('div', class_="description")
+        title = hemisphere.h3.text
     
-    # Loop to get and store hemisphere urls to get image sub url
-    # Base url
-    title_url = []
+        # Collect image link by browsing to hemisphere page
+        hemisphere_link = hemisphere.a["href"]    
+        browser.visit(usgs_url + hemisphere_link)
+    
+        image_html = browser.html
+        image_soup = bs(image_html, 'html.parser')
+    
+        image_link = image_soup.find('div', class_='downloads')
+        image_url = image_link.find('li').a['href']
 
-    for name in names:
-        title_url.append(usgs_url + (name.find('a')['href']))
+        # Create Dictionary to store title and url info
+        image_dict = {}
+        image_dict['title'] = title
+        image_dict['img_url'] = image_url
+    
+        hemisphere_image_urls.append(image_dict)
+
+    print(hemisphere_image_urls)
 
 
-
-    # Retrieve html
-    html = browser.html
-
-    # Create BeautifulSoup object; parse with 'html.parser'
-    soup = bs(html, 'html.parser')
-
-    # Loop to pull all full size image urls
-    hemp_image_url = []
-
-    for hemp_url in title_url:
-
-        # Open browser for each url
-        browser.visit(hemp_url)
-
-        # Create BeautifulSoup object; parse with 'html.parser'
-        soup = bs(html, 'html.parser')
-
-        # Create new url for list
-        image_url = usgs_url + soup.find('img', class_='wide-image')['src']
-
-        # Add url to list for dict 
-        hemp_image_url.append(image_url)
-
-    browser.quit() 
-
-    # Create a list of dict called 'hemisphere_image_url'  
-    # Blank list
-    hemisphere_image_url =[]
-
-    # Loop to combine list into dictonary and then add to blank list
-    for x in range(len(hemp_image_url)):
-
-        # For x combine the key value pair with comprehension and add the hemp_image_url list
-        hemisphere_image_url.append({'title':titles[x], 'hemp_image_url': hemp_image_url[x]})
-    print(hemisphere_image_url)
 
     # Create dictionary for all info scraped from sources above
     mars_dict = {
@@ -140,7 +122,7 @@ def scrape():
         'news_p': news_p,
         'featured_image_url': featured_image_url,
         'fact_table' : str(mars_html_table),
-        'hemisphere_images' : hemisphere_image_url
+        'hemisphere_images' : hemisphere_image_urls
         }
     
 
