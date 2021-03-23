@@ -63,25 +63,27 @@ def scrape():
 
     # Check that correct table is in dataframe
     mars_facts_df = tables[2]
+    mars_facts_df.columns = ["Description", "Value"]
 
     # Use Pandas to convert the data to a HTML table string.
     mars_html_table = mars_facts_df.to_html(index=False, header=False)
+    mars_html_table.replace('\n', '')
     print(mars_html_table)  
 
     # Mars Hemispheres
 
     # Set up urls 
     usgs_url = 'https://https://astrogeology.usgs.gov'
-    hemisphere_url = '/search/results?q=hemisphere+enhanced&k1=target&v1=Mars' 
+    hemispheres_url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars' 
 
     # Visit url in splinter
-    browser.visit(usgs_url + hemisphere_url)
+    browser.visit(hemispheres_url)
 
     # Retrieve html
-    hemisphere_html = browser.html
+    hemispheres_html = browser.html
 
     # Create BeautifulSoup object; parse with 'html.parser'
-    hemispheres_soup = bs(hemisphere_html, 'html.parser')
+    hemispheres_soup = bs(hemispheres_html, 'html.parser')
 
     # Mars hemispheres products data
     all_mars_hemispheres = hemispheres_soup.find('div', class_='collapsible results')

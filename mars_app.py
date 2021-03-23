@@ -25,6 +25,7 @@ def scrape():
   
     mars_dict = mongo.db.mars
     mars_dict = scrape_mars.scrape()
+    
     # Update the Mongo database using update and upsert=True
     mongo.db.collection.update({}, mars_dict, upsert=True)
     return redirect("/")
