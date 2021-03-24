@@ -40,12 +40,12 @@
             <div class="col-md-8">
                 <h1>Featured Mars Image</h1>
                 <hr>
-                <img src="{{mars.featured_image_url}}" alt="Featured Mars Image">
+                <img src="{{mars.featured_image_url}}" alt="Featured Mars Image" class=“rounded float-left”>
             </div>
             <!-- look at css for table -->
             <div class="col-md-4">
                 <h2>Mars Facts</h2>
-                <table class="table table-striped">{{mars.mars_html_table | safe}}</table>
+                <table class="table table-striped">{{mars.fact_table | safe}}</table>
             </div>
         </div>
         <!-- row with Mars Hemispheres -->
@@ -55,7 +55,7 @@
             </div>
         </div>
         <!--row 2 by 2 grid with hemi photos calls to dict hemisphere urls will need loop -->
-        <div class="row">
+        <!-- <div class="row">
             {% for hemisphere in mars.hemisphere_images %}
             <div class="col-6">
                 <div>
@@ -64,11 +64,23 @@
                 <div>
                     <h4>{{hemisphere.title | safe}}</h4>
                 </div>
+            </div> -->
+
+            <!-- {% endfor %}
+        </div> -->
+        <div class='row'>
+            {% for hemisphere in mars.hemisphere_images %}
+            <div class='col col-md-6'>
+                <div>
+                    <img width='550px' height='550px' src='{{hemisphere.img_url | safe}}' alt='Mars Hemisphere' width='100%' class='img-thumbnail' style='padding: 20px;'>
+                </div>
+                <div>
+                    <h4 style='text-align: center;'>{{hemisphere.title | safe}}</h4>
+                </div>
             </div>
 
-            {% endfor %}
+    {% endfor %}
         </div>
-
     </div>    
 </body>
 </html>
